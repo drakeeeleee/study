@@ -14,8 +14,8 @@ func NewTaskDao(db *gorm.DB) *TaskDao {
 	return &TaskDao{db: db}
 }
 
-func (t *TaskDao) Create(task *model.Task) error {
-	if err := t.db.Create(task).Error; err != nil {
+func (t *TaskDao) Create(tasks []*model.Task) error {
+	if err := t.db.Create(tasks).Error; err != nil {
 		return err
 	}
 	return nil
