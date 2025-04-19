@@ -18,7 +18,7 @@ func Test_TaskDao(t *testing.T) {
 
 	taskDao := NewTaskDao(db)
 
-	err = taskDao.Create([]*model.Task{{TaskId: "test_eval_id_1"}})
+	err = taskDao.Create([]*model.Task{{TaskId: "test_eval_id_1"}, {TaskId: "test_eval_id_2"}})
 	as.NoError(err)
 
 	task, err := taskDao.SelectFirst("test_eval_id_1")
