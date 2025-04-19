@@ -16,3 +16,18 @@ func (t *TaskDao) CreateTask(task *model.Task) error {
 	}
 	return nil
 }
+
+func (t *TaskDao) CheckExistence(tasks []*model.Task) ([]*model.Task, error) {
+	var taskIds []string
+	for _, task := range tasks {
+		taskIds = append(taskIds, task.TaskId)
+	}
+
+	var foundTasks []*model.Task
+	if err := t.db.Where("task_id IN ?", taskIds).Find(&foundTasks).Error; err != nil {
+		return nil, err
+	}
+
+	return foundTasks, nil
+
+}
