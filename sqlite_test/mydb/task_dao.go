@@ -22,11 +22,11 @@ func (t *TaskDao) Create(task *model.Task) error {
 }
 
 func (t *TaskDao) SelectFirst(taskId string) (*model.Task, error) {
-	var task *model.Task
-	if err := t.db.First(task, "task_id = ?", taskId).Error; err != nil {
+	var task model.Task
+	if err := t.db.First(&task, "task_id = ?", taskId).Error; err != nil {
 		return nil, err
 	}
-	return task, nil
+	return &task, nil
 }
 
 func (t *TaskDao) CheckExistence(tasks []*model.Task) ([]*model.Task, error) {
