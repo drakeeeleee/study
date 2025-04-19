@@ -24,4 +24,16 @@ func Test_TaskDao(t *testing.T) {
 	task, err := taskDao.SelectFirst("test_eval_id_1")
 	as.NoError(err)
 	as.NotNil(task)
+
+	existence, err := taskDao.CheckAllExistence([]*model.Task{{TaskId: "test_eval_id_1"}, {TaskId: "test_eval_id_2"}})
+	as.NoError(err)
+	as.True(existence)
+
+	existence, err = taskDao.CheckAllExistence([]*model.Task{{TaskId: "test_eval_id_3"}, {TaskId: "test_eval_id_2"}})
+	as.NoError(err)
+	as.False(existence)
+
+	existence, err = taskDao.CheckAllExistence([]*model.Task{{TaskId: "test_eval_id_3"}, {TaskId: "test_eval_id_4"}})
+	as.NoError(err)
+	as.False(existence)
 }

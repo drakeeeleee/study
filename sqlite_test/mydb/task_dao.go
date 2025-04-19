@@ -29,7 +29,7 @@ func (t *TaskDao) SelectFirst(taskId string) (*model.Task, error) {
 	return &task, nil
 }
 
-func (t *TaskDao) CheckExistence(tasks []*model.Task) ([]*model.Task, error) {
+func (t *TaskDao) CheckAllExistence(tasks []*model.Task) (bool, error) {
 	var taskIds []string
 	for _, task := range tasks {
 		taskIds = append(taskIds, task.TaskId)
@@ -37,9 +37,9 @@ func (t *TaskDao) CheckExistence(tasks []*model.Task) ([]*model.Task, error) {
 
 	var foundTasks []*model.Task
 	if err := t.db.Where("task_id IN ?", taskIds).Find(&foundTasks).Error; err != nil {
-		return nil, err
+		return false, err
 	}
 
-	return foundTasks, nil
+	return len(foundTasks) == len(tasks), nil
 
 }
