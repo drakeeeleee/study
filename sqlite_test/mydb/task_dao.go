@@ -14,11 +14,19 @@ func NewTaskDao(db *gorm.DB) *TaskDao {
 	return &TaskDao{db: db}
 }
 
-func (t *TaskDao) CreateTask(task *model.Task) error {
+func (t *TaskDao) Create(task *model.Task) error {
 	if err := t.db.Create(task).Error; err != nil {
 		return err
 	}
 	return nil
+}
+
+func (t *TaskDao) SelectFirst(taskId string) (*model.Task, error) {
+	var task *model.Task
+	if err := t.db.First(task, "task_id = ?", taskId).Error; err != nil {
+		return nil, err
+	}
+	return task, nil
 }
 
 func (t *TaskDao) CheckExistence(tasks []*model.Task) ([]*model.Task, error) {
