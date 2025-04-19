@@ -10,6 +10,10 @@ type TaskDao struct {
 	db *gorm.DB
 }
 
+func NewTaskDao(db *gorm.DB) *TaskDao {
+	return &TaskDao{db: db}
+}
+
 func (t *TaskDao) CreateTask(task *model.Task) error {
 	if err := t.db.Create(task).Error; err != nil {
 		return err
