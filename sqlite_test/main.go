@@ -34,7 +34,7 @@ func main() {
 		go func() {
 			tx := db.Begin()
 
-			if err := userDao.Create(tx, []*model.User{{UserId: fmt.Sprint("user_%d", i)}}); err != nil {
+			if err := userDao.Create(tx, []*model.User{{UserId: fmt.Sprintf("user_%d", i)}}); err != nil {
 				tx.Rollback()
 				log.Fatalf("failed to create users at %dth trial: %v", i, err)
 			}
