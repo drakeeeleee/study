@@ -29,14 +29,20 @@ func main() {
 	wait.Add(numGoroutine)
 	for i := range numGoroutine {
 		go func() {
+			tx := db.Begin()
+
 			tasks := tasks
-			if existence, err := taskDao.CheckAllExistence(db, tasks); err != nil {
+			if existence, err := taskDao.CheckAllExistence(tx, tasks); err != nil {
+				tx.Rollback()
 				log.Fatalf("failed to check existence at %dth tria: %v", i, err)
 			} else if existence {
 				fmt.Printf("tasks already exist at %dth trial\n", i)
-			} else if err = taskDao.Create(db, tasks); err != nil {
+			} else if err = taskDao.Create(tx, tasks); err != nil {
+				tx.Rollback()
 				log.Fatalf("failed to create tasks at %dth tria: %v", i, err)
 			}
+
+			tx.Commit()
 			wait.Done()
 		}()
 	}
