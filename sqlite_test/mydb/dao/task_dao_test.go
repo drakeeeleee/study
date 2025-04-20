@@ -1,7 +1,8 @@
-package mydb
+package dao
 
 import (
 	"os"
+	"sqlitetest/mydb"
 	"sqlitetest/mydb/model"
 	"testing"
 
@@ -12,7 +13,7 @@ func Test_TaskDao(t *testing.T) {
 	as := assert.New(t)
 
 	dbName := "task_dao.db"
-	db, err := NewLocalDb(dbName)
+	db, err := mydb.NewLocalDb(dbName)
 	as.NoError(err)
 	defer func() { _ = os.Remove(dbName) }()
 

@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"sqlitetest/mydb"
+	"sqlitetest/mydb/dao"
 	"sqlitetest/mydb/model"
 	"sync"
 )
@@ -16,7 +17,7 @@ func main() {
 		log.Fatalf("failed to make local db: %v", err)
 	}
 	defer func() { _ = os.Remove(dbName) }()
-	taskDao := mydb.NewTaskDao()
+	taskDao := dao.NewTaskDao()
 
 	tasks := []*model.Task{
 		{TaskId: "task_id_1"},
