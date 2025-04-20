@@ -34,12 +34,12 @@ func main() {
 			tasks := tasks
 			if existence, err := taskDao.CheckAllExistence(tx, tasks); err != nil {
 				tx.Rollback()
-				log.Fatalf("failed to check existence at %dth tria: %v", i, err)
+				log.Fatalf("failed to check existence at %dth trial: %v", i, err)
 			} else if existence {
 				fmt.Printf("tasks already exist at %dth trial\n", i)
 			} else if err = taskDao.Create(tx, tasks); err != nil {
 				tx.Rollback()
-				log.Fatalf("failed to create tasks at %dth tria: %v", i, err)
+				log.Fatalf("failed to create tasks at %dth trial: %v", i, err)
 			}
 
 			tx.Commit()
