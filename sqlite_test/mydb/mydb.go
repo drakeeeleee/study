@@ -1,7 +1,6 @@
 package mydb
 
 import (
-	"log"
 	"sqlitetest/mydb/model"
 
 	"gorm.io/driver/sqlite"
@@ -14,7 +13,7 @@ func NewLocalDb(name string) (*gorm.DB, error) {
 		return nil, err
 	}
 	if err := db.AutoMigrate(&model.Task{}, &model.User{}); err != nil {
-		log.Fatalf("failed to auto migrate: %v", err)
+		return nil, err
 	}
 	return db, nil
 }
