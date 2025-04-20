@@ -16,7 +16,7 @@ func main() {
 		log.Fatalf("failed to make local db: %v", err)
 	}
 	defer func() { _ = os.Remove(dbName) }()
-	taskDao := mydb.NewTaskDao(db)
+	taskDao := mydb.NewTaskDao()
 
 	tasks := []*model.Task{
 		{TaskId: "task_id_1"},
@@ -30,11 +30,11 @@ func main() {
 	for i := range numGoroutine {
 		go func() {
 			tasks := tasks
-			if existence, err := taskDao.CheckAllExistence(tasks); err != nil {
+			if existence, err := taskDao.CheckAllExistence(db, tasks); err != nil {
 				log.Fatalf("failed to check existence at %dth tria: %v", i, err)
 			} else if existence {
 				fmt.Printf("tasks already exist at %dth trial\n", i)
-			} else if err = taskDao.Create(tasks); err != nil {
+			} else if err = taskDao.Create(db, tasks); err != nil {
 				log.Fatalf("failed to create tasks at %dth tria: %v", i, err)
 			}
 			wait.Done()

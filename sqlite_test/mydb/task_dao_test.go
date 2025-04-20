@@ -16,24 +16,24 @@ func Test_TaskDao(t *testing.T) {
 	as.NoError(err)
 	defer func() { _ = os.Remove(dbName) }()
 
-	taskDao := NewTaskDao(db)
+	taskDao := NewTaskDao()
 
-	err = taskDao.Create([]*model.Task{{TaskId: "test_eval_id_1"}, {TaskId: "test_eval_id_2"}})
+	err = taskDao.Create(db, []*model.Task{{TaskId: "test_eval_id_1"}, {TaskId: "test_eval_id_2"}})
 	as.NoError(err)
 
-	task, err := taskDao.SelectFirst("test_eval_id_1")
+	task, err := taskDao.SelectFirst(db, "test_eval_id_1")
 	as.NoError(err)
 	as.NotNil(task)
 
-	existence, err := taskDao.CheckAllExistence([]*model.Task{{TaskId: "test_eval_id_1"}, {TaskId: "test_eval_id_2"}})
+	existence, err := taskDao.CheckAllExistence(db, []*model.Task{{TaskId: "test_eval_id_1"}, {TaskId: "test_eval_id_2"}})
 	as.NoError(err)
 	as.True(existence)
 
-	existence, err = taskDao.CheckAllExistence([]*model.Task{{TaskId: "test_eval_id_3"}, {TaskId: "test_eval_id_2"}})
+	existence, err = taskDao.CheckAllExistence(db, []*model.Task{{TaskId: "test_eval_id_3"}, {TaskId: "test_eval_id_2"}})
 	as.NoError(err)
 	as.False(existence)
 
-	existence, err = taskDao.CheckAllExistence([]*model.Task{{TaskId: "test_eval_id_3"}, {TaskId: "test_eval_id_4"}})
+	existence, err = taskDao.CheckAllExistence(db, []*model.Task{{TaskId: "test_eval_id_3"}, {TaskId: "test_eval_id_4"}})
 	as.NoError(err)
 	as.False(existence)
 }
