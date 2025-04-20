@@ -17,7 +17,9 @@ func main() {
 		log.Fatalf("failed to make local db: %v", err)
 	}
 	defer func() { _ = os.Remove(dbName) }()
+
 	taskDao := dao.NewTaskDao()
+	userDao := dao.NewUserDao()
 
 	tasks := []*model.Task{
 		{TaskId: "task_id_1"},
@@ -31,6 +33,11 @@ func main() {
 	for i := range numGoroutine {
 		go func() {
 			tx := db.Begin()
+
+			if err := userDao.Create(tx, []*model.User{{UserId: fmt.Sprint("user_%d", i)}}); err != nil {
+				tx.Rollback()
+				log.Fatalf("failed to create users at %dth trial: %v", i, err)
+			}
 
 			tasks := tasks
 			if existence, err := taskDao.CheckAllExistence(tx, tasks); err != nil {
