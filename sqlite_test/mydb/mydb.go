@@ -13,7 +13,7 @@ func NewLocalDb(name string) (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	if err := db.AutoMigrate(&model.Task{}); err != nil {
+	if err := db.AutoMigrate(&model.Task{}, &model.User{}); err != nil {
 		log.Fatalf("failed to auto migrate: %v", err)
 	}
 	return db, nil
